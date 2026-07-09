@@ -1,0 +1,27 @@
+# Render deployment config for the DDJC backend (in /server).
+# Push this repo to GitHub and create a new Web Service on Render
+# pointing at this file (or connect the repo and pick "Blueprint").
+
+services:
+  - type: web
+    name: ddjc-backend
+    rootDir: server
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
