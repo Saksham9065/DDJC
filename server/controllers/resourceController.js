@@ -1,4 +1,5 @@
 const Resource = require("../models/Resource");
+const logActivity = require("../utils/logActivity");
 
 // Create Resource
 const createResource = async (req, res) => {
@@ -9,6 +10,8 @@ const createResource = async (req, res) => {
       ...req.body,
       file,
     });
+
+    await logActivity("Upload", "Resource", `Resource "${resource.title}" uploaded.`);
 
     res.status(201).json({
       success: true,
@@ -116,6 +119,8 @@ const deleteResource = async (req, res) => {
         message: "Resource not found.",
       });
     }
+
+    await logActivity("Delete", "Resource", "Resource deleted.");
 
     res.status(200).json({
       success: true,

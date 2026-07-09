@@ -1,5 +1,6 @@
 const Contact = require("../models/Contact");
 const sendEmail = require("../utils/sendEmail");
+const logActivity = require("../utils/logActivity");
 
 // ==========================
 // Create Contact Message
@@ -31,6 +32,8 @@ const createContact = async (req, res) => {
       subject,
       message,
     });
+
+    await logActivity("Create", "Contact", `${fullName} submitted a contact form.`);
 
     // Send Confirmation Email
     await sendEmail(
@@ -213,6 +216,8 @@ const deleteContact = async (req, res) => {
         message: "Contact not found.",
       });
     }
+
+    await logActivity("Delete", "Contact", "Contact deleted.");
 
     res.status(200).json({
       success: true,

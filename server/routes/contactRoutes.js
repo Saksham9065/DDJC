@@ -9,6 +9,8 @@ const {
   getContactStats,
 } = require("../controllers/contactController");
 
+const { body } = require("express-validator");
+
 const router = express.Router();
 
 // ==========================
@@ -16,7 +18,17 @@ const router = express.Router();
 // ==========================
 
 // Create Contact Message
-router.post("/", createContact);
+router.post(
+  "/",
+  [
+    body("fullName").notEmpty().withMessage("Name is required"),
+    body("email").isEmail().withMessage("Valid email is required"),
+    body("phone").notEmpty().withMessage("Phone is required"),
+    body("subject").notEmpty().withMessage("Subject is required"),
+    body("message").notEmpty().withMessage("Message is required"),
+  ],
+  createContact
+);
 
 // Get Contact Statistics
 router.get("/stats", getContactStats);

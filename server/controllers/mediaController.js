@@ -1,4 +1,5 @@
 const Media = require("../models/Media");
+const logActivity = require("../utils/logActivity");
 
 // ==========================
 // Create Media
@@ -20,6 +21,8 @@ const createMedia = async (req, res) => {
       isPublished,
       image: req.file ? req.file.filename : "",
     });
+
+    await logActivity("Upload", "Media", `Media "${title}" uploaded.`);
 
     res.status(201).json({
       success: true,
@@ -151,6 +154,8 @@ const deleteMedia = async (req, res) => {
         message: "Media not found.",
       });
     }
+
+    await logActivity("Delete", "Media", "Media deleted.");
 
     res.status(200).json({
       success: true,
