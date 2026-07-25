@@ -1,33 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
-import DataTable from "../components/DataTable";
 
 function Contacts() {
   const [contacts, setContacts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const columns = [
-    {
-      label: "Name",
-      key: "fullName",
-    },
-    {
-      label: "Email",
-      key: "email",
-    },
-    {
-      label: "Phone",
-      key: "phone",
-    },
-    {
-      label: "Subject",
-      key: "subject",
-    },
-    {
-      label: "Status",
-      key: "status",
-    },
-  ];
 
   useEffect(() => {
     fetchContacts();
@@ -36,21 +11,13 @@ function Contacts() {
   const fetchContacts = async () => {
     try {
       const { data } = await api.get("/contact");
-
       setContacts(data.data);
-
     } catch (error) {
-
-      console.error(error);
-
-    } finally {
-
-      setLoading(false);
-
+      console.log(error);
     }
   };
 
-  const handleDelete = async (contact) => {
+  const deleteContact = async (id) => {
     const confirmDelete = window.confirm(
       "Delete this contact?"
     );
@@ -58,57 +25,119 @@ function Contacts() {
     if (!confirmDelete) return;
 
     try {
-
-      await api.delete(`/contact/${contact._id}`);
+      await api.delete(`/contact/${id}`);
 
       fetchContacts();
-
     } catch (error) {
-
-      console.error(error);
-
+      console.log(error);
     }
   };
 
-  const handleEdit = (contact) => {
-    alert(
-      `Update status for ${contact.fullName} (Coming Soon)`
-    );
+  const updateStatus = async (id, status) => {
+    try {
+      await api.put(`/contact/${id}/status`, {
+        status,
+      });
+
+      fetchContacts();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  if (loading) {
-    return (
-      <div className="text-center py-20 text-lg">
-        Loading Contacts...
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
 
-      <div className="flex justify-between items-center">
+      <div>
 
-        <div>
-
-          <h1 className="text-3xl font-bold text-[#0A2540]">
-            Contact Messages
-          </h1>
-
-          <p className="text-gray-500">
-            Manage messages received from the website.
-          </p>
-
-        </div>
+        <h1 className="text-3xl font-bold">
+          Contact Messages
+        </h1>
 
       </div>
 
-      <DataTable
-        columns={columns}
-        data={contacts}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      <div className="bg-white rounded-xl shadow overflow-auto">
+
+        <table className="w-full">
+
+          <thead className="bg-gray-100">
+
+            <tr>
+
+              <th className="p-4">Name</th>
+
+              <th>Email</th>
+
+              <th>Subject</th>
+
+              <th>Status</th>
+
+              <th>Actions</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            {contacts.map((item) => (
+
+              <tr key={item._id}>
+
+                <td className="p-4">
+                  {item.fullName}
+                </td>
+
+                <td>
+                  {item.email}
+                </td>
+
+                <td>
+                  {item.subject}
+                </td>
+
+                <td>
+
+                  <select
+                    value={item.status}
+                    onChange={(e) =>
+                      updateStatus(
+                        item._id,
+                        e.target.value
+                      )
+                    }
+                  >
+
+                    <option>New</option>
+
+                    <option>Resolved</option>
+
+                  </select>
+
+                </td>
+
+                <td>
+
+                  <button
+                    onClick={() =>
+                      deleteContact(item._id)
+                    }
+                    className="bg-red-600 text-white px-3 py-2 rounded"
+                  >
+                    Delete
+                  </button>
+
+                </td>
+
+              </tr>
+
+            ))}
+
+          </tbody>
+
+        </table>
+
+      </div>
 
     </div>
   );

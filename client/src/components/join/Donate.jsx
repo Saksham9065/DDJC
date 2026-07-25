@@ -1,86 +1,169 @@
-import { motion } from "framer-motion";
-import { FaHandsHelping, FaUsers, FaHeart } from "react-icons/fa";
+import { useState } from "react";
+import api from "../../services/api";
 
 function Donate() {
-  const impactAreas = [
-    {
-      icon: <FaHandsHelping />,
-      title: "Free Legal Aid",
-      description: "Help us provide legal representation and support to marginalized individuals who cannot afford justice.",
-    },
-    {
-      icon: <FaUsers />,
-      title: "Community Outreach",
-      description: "Fund awareness campaigns, workshops, and field programmes that educate communities about their rights.",
-    },
-    {
-      icon: <FaHeart />,
-      title: "Victim Support",
-      description: "Support victims of injustice with rehabilitation, counselling, and financial assistance.",
-    },
-  ];
+  const [amount, setAmount] = useState("");
+  const [donorName, setDonorName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [purpose, setPurpose] = useState("General Donation");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleDonate = async (e) => {
+    e.preventDefault();
+
+    if (!amount || !donorName || !email) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data: orderData } = await api.post("/donations/create-order", {
+        amount: Number(amount),
+      });
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_xxxxxxxxx",
+        amount: orderData.order.amount,
+        currency: "INR",
+        name: "DDJC",
+        description: "Donation",
+        order_id: orderData.order.id,
+        handler: async function (response) {
+          try {
+            await api.post("/donations/verify-payment", {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              donorName,
+              email,
+              phone,
+              amount: Number(amount),
+              purpose,
+            });
+
+            setSuccess(true);
+            setAmount("");
+            setDonorName("");
+            setEmail("");
+            setPhone("");
+            setPurpose("General Donation");
+          } catch (error) {
+            console.error(error);
+            alert("Payment verification failed.");
+          }
+        },
+        prefill: {
+          name: donorName,
+          email,
+          contact: phone,
+        },
+        theme: {
+          color: "#0A2540",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to initiate payment.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <section className="py-20 md:py-24 bg-white">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-green-600 mb-4">
+            Thank You for Your Donation!
+          </h2>
+          <p className="text-gray-600">
+            Your contribution makes a difference.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 md:py-24 bg-white">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="container mx-auto px-6"
-      >
+      <div className="container mx-auto px-6">
         <div className="text-center flex flex-col items-center mb-16">
-          <span className="text-[#2563EB] font-bold tracking-[0.15em] uppercase text-xs mb-3">
+          <span className="text-[#2563EB] font-bold tracking-[0.2em] uppercase text-xs mb-3">
             Support Our Cause
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#0A2540] mb-5">
             Make A Donation
           </h2>
           <p className="text-base md:text-lg text-gray-600 leading-relaxed text-center max-w-xl">
-            Your contribution directly supports legal aid, community empowerment, and justice for marginalized communities. Every rupee counts.
+            Your contribution directly supports legal aid, community empowerment, and justice for marginalized communities.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
-          {impactAreas.map((area, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-gray-50 border border-gray-100 rounded-3xl p-8 text-center hover:shadow-xl transition-all duration-300"
+        <div className="max-w-xl mx-auto bg-gray-50 rounded-3xl p-8">
+          <form onSubmit={handleDonate} className="space-y-5">
+            <input
+              type="number"
+              placeholder="Amount (₹)"
+              className="w-full border rounded-lg p-3"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+            />
+
+            <input
+              type="text"
+              placeholder="Full Name"
+              className="w-full border rounded-lg p-3"
+              value={donorName}
+              onChange={(e) => setDonorName(e.target.value)}
+              required
+            />
+
+            <input
+              type="email"
+              placeholder="Email"
+              className="w-full border rounded-lg p-3"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <input
+              type="tel"
+              placeholder="Phone"
+              className="w-full border rounded-lg p-3"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+
+            <select
+              className="w-full border rounded-lg p-3"
+              value={purpose}
+              onChange={(e) => setPurpose(e.target.value)}
             >
-              <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-[#0A2540] to-[#143A61] text-white flex items-center justify-center text-2xl mb-6">
-                {area.icon}
-              </div>
-              <h3 className="text-xl font-bold text-[#0A2540] mb-4">{area.title}</h3>
-              <p className="text-gray-600 leading-relaxed text-sm">{area.description}</p>
-            </motion.div>
-          ))}
-        </div>
+              <option>General Donation</option>
+              <option>Legal Aid</option>
+              <option>Community Outreach</option>
+              <option>Victim Support</option>
+            </select>
 
-        <div className="max-w-2xl mx-auto bg-gradient-to-br from-[#0A2540] to-[#143A61] rounded-3xl p-8 md:p-12 text-center text-white">
-          <h3 className="text-2xl md:text-3xl font-bold mb-4">Donate Now</h3>
-          <p className="text-gray-300 mb-8 leading-relaxed">
-            Bank transfers and online donations are accepted. For bulk donations or corporate partnerships, please contact us directly.
-          </p>
-          <div className="bg-white/10 rounded-2xl p-6 mb-8 text-left">
-            <p className="text-sm text-gray-300 mb-2 font-semibold">Bank Details:</p>
-            <p className="text-white font-mono text-sm">
-              Account Name: Dalit Dignity & Justice Center<br />
-              Bank: State Bank of India<br />
-              Account Number: XXXXXXXXXXXX<br />
-              IFSC Code: SBIN000XXXX
-            </p>
-          </div>
-          <p className="text-gray-300 text-sm">
-            For donation receipts and queries, email{" "}
-            <a href="mailto:donate@ddjc.org" className="text-[#60A5FA] font-semibold hover:underline">
-              donate@ddjc.org
-            </a>
-          </p>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#0A2540] text-white py-3 rounded-lg font-semibold hover:bg-[#1a3a6a] transition disabled:opacity-60"
+            >
+              {loading ? "Processing..." : "Donate Now"}
+            </button>
+          </form>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

@@ -101,6 +101,9 @@ app.use("/api/home", homeRoutes);
 // Hero
 app.use("/api/hero", require("./routes/heroRoutes"));
 
+// About
+app.use("/api/about", require("./routes/aboutRoutes"));
+
 // Pages
 app.use("/api/pages", pageRoutes);
 

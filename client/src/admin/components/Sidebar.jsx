@@ -3,6 +3,7 @@ import {
   FaTachometerAlt,
   FaChartBar,
   FaBell,
+  FaFileAlt,
   FaFileExport,
   FaUserCircle,
   FaEnvelope,
@@ -13,6 +14,8 @@ import {
   FaCog,
   FaSignOutAlt,
   FaBalanceScale,
+  FaHistory,
+  FaHome,
 } from "react-icons/fa";
 
 const menuItems = [
@@ -20,6 +23,16 @@ const menuItems = [
     name: "Dashboard",
     path: "/admin/dashboard",
     icon: <FaTachometerAlt />,
+  },
+  {
+    name: "Hero Section",
+    path: "/admin/hero",
+    icon: <FaHome />,
+  },
+  {
+    name: "About CMS",
+    path: "/admin/about",
+    icon: <FaFileAlt />,
   },
   {
     name: "Analytics",
@@ -30,6 +43,11 @@ const menuItems = [
     name: "Notifications",
     path: "/admin/notifications",
     icon: <FaBell />,
+  },
+  {
+    name: "Activity",
+    path: "/admin/activity",
+    icon: <FaHistory />,
   },
   {
     name: "Export Center",

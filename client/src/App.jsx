@@ -35,6 +35,7 @@ import Login from "./admin/pages/Login";
 import Dashboard from "./admin/pages/Dashboard";
 import Analytics from "./admin/pages/Analytics";
 import Notifications from "./admin/pages/Notifications";
+import Activity from "./admin/pages/Activity";
 import ExportCenter from "./admin/pages/ExportCenter";
 import Profile from "./admin/pages/Profile";
 import Contacts from "./admin/pages/Contacts";
@@ -43,6 +44,9 @@ import MediaAdmin from "./admin/pages/Media";
 import ResourcesAdmin from "./admin/pages/Resources";
 import Donations from "./admin/pages/Donations";
 import Settings from "./admin/pages/Settings";
+import Hero from "./admin/pages/Hero";
+import AboutCMS from "./admin/pages/AboutCMS";
+import Pages from "./admin/pages/Pages";
 
 function App() {
   const location = useLocation();
@@ -106,6 +110,16 @@ function App() {
               />
 
               <Route
+                path="/admin/hero"
+                element={<Hero />}
+              />
+
+              <Route
+                path="/admin/about"
+                element={<AboutCMS />}
+              />
+
+              <Route
                 path="/admin/analytics"
                 element={<Analytics />}
               />
@@ -113,6 +127,11 @@ function App() {
               <Route
                 path="/admin/notifications"
                 element={<Notifications />}
+              />
+
+              <Route
+                path="/admin/activity"
+                element={<Activity />}
               />
 
               <Route
@@ -153,6 +172,11 @@ function App() {
               <Route
                 path="/admin/settings"
                 element={<Settings />}
+              />
+
+              <Route
+                path="/admin/pages"
+                element={<Pages />}
               />
 
             </Route>

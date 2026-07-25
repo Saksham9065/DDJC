@@ -1,6 +1,5 @@
 import {
   FaFacebookF,
-  FaTwitter,
   FaInstagram,
   FaYoutube,
   FaEnvelope,
@@ -84,7 +83,6 @@ function Footer() {
                 { icon: FaFacebookF, href: "https://www.facebook.com/DalitDignityJusticeCenter", color: "hover:bg-[#1877F2]" },
                 { icon: FaInstagram, href: "https://www.instagram.com/ddjc_up", color: "hover:bg-[#E4405F]" },
                 { icon: FaYoutube, href: "https://www.youtube.com/@ddjcUP", color: "hover:bg-[#FF0000]" },
-                { icon: FaTwitter, href: "#", color: "hover:bg-[#1DA1F2]" },
                 { icon: FaWhatsapp, href: "https://wa.me/919453645931", color: "hover:bg-[#25D366]" },
               ].map((social, index) => (
                 <a 

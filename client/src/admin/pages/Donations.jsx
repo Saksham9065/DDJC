@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
-import { FaTrash, FaDonate } from "react-icons/fa";
 
 function Donations() {
   const [donations, setDonations] = useState([]);
@@ -44,8 +43,6 @@ function Donations() {
   return (
     <div className="space-y-8">
 
-      {/* Heading */}
-
       <div className="flex justify-between items-center">
 
         <div>
@@ -62,25 +59,13 @@ function Donations() {
 
         <div className="bg-green-600 text-white px-6 py-4 rounded-xl flex items-center gap-3">
 
-          <FaDonate className="text-2xl" />
-
-          <div>
-
-            <p>Total Donations</p>
-
-            <h2 className="text-xl font-bold">
-
-              ₹{totalAmount.toLocaleString()}
-
-            </h2>
-
-          </div>
+          <h2 className="text-xl font-bold">
+            ₹{totalAmount.toLocaleString()}
+          </h2>
 
         </div>
 
       </div>
-
-      {/* Table */}
 
       <div className="bg-white rounded-xl shadow overflow-hidden">
 
@@ -128,27 +113,19 @@ function Donations() {
               >
 
                 <td className="p-4">
-
                   {item.donorName}
-
                 </td>
 
                 <td className="p-4 font-semibold text-green-600">
-
                   ₹{item.amount}
-
                 </td>
 
                 <td className="p-4">
-
                   {item.purpose}
-
                 </td>
 
                 <td className="p-4">
-
                   {item.paymentMethod}
-
                 </td>
 
                 <td className="p-4">
@@ -173,7 +150,7 @@ function Donations() {
                     onClick={() => handleDelete(item._id)}
                     className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700"
                   >
-                    <FaTrash />
+                    Delete
                   </button>
 
                 </td>

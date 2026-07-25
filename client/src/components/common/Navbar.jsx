@@ -6,7 +6,6 @@ import {
   FaChevronDown,
   FaFacebookF,
   FaInstagram,
-  FaTwitter,
   FaYoutube,
   FaWhatsapp,
 } from "react-icons/fa";
@@ -60,7 +59,6 @@ const MENU_ITEMS = [
 const SOCIAL_LINKS = [
   { Icon: FaFacebookF, href: "https://www.facebook.com/DalitDignityJusticeCenter", hoverColor: "hover:bg-[#1877F2]" },
   { Icon: FaInstagram, href: "https://www.instagram.com/ddjc_up", hoverColor: "hover:bg-[#E4405F]" },
-  { Icon: FaTwitter, href: "https://twitter.com", hoverColor: "hover:bg-[#1DA1F2]" },
   { Icon: FaYoutube, href: "https://www.youtube.com/@ddjcUP", hoverColor: "hover:bg-[#FF0000]" },
   { Icon: FaWhatsapp, href: "https://wa.me/919453645931", hoverColor: "hover:bg-[#25D366]" },
 ];

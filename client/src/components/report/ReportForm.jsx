@@ -132,7 +132,7 @@ function ReportForm() {
             />
           </motion.div>
           <motion.div variants={itemVariants} className="mt-5">
-            <label className="block flex items-center justify-center gap-3 border-2 border-dashed border-gray-300 rounded-2xl py-8 cursor-pointer hover:border-[#2563EB] transition">
+            <label className="block items-center justify-center gap-3 border-2 border-dashed border-gray-300 rounded-2xl py-8 cursor-pointer hover:border-[#2563EB] transition">
               <span className="text-gray-500 text-sm">Click to upload FIR, Images or Documents</span>
               <input type="file" name="file" onChange={handleChange} className="hidden" />
             </label>
@@ -148,7 +148,7 @@ function ReportForm() {
           <motion.div variants={itemVariants} className="mt-8 text-center">
             <button 
               type="submit" 
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white px-8 py-3.5 rounded-full font-bold hover:from-blue-700 transition hover:scale-105"
+              className="inline-flex items-center gap-3 bg-linear-to-r from-[#2563EB] to-[#1D4ED8] text-white px-8 py-3.5 rounded-full font-bold hover:from-blue-700 transition hover:scale-105"
             >
               Submit Report
             </button>
